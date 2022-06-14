@@ -3,6 +3,9 @@ from random import randint
 TARGET_STRING_NUM = 5 # 表示文字数
 LOST_STRING_NUM = 3   # 欠損文字数
 
+HIT = 1   # ヒットした
+NOHIT = 0
+
 def main():
     taget_strings = [] # 対象文字を保存するリスト
     for i in range(TARGET_STRING_NUM):
@@ -20,21 +23,13 @@ def main():
 
     print("対象文字")
     # 対象文字の表示後、欠損文字の表示
-    for i in taget_strings: 
-        print("{:3s}".format(chr(i)), end="")
-    for i in lost_strings:
-        print("{:3s}".format(chr(i)), end="")
-    print("")
+    output_string(taget_strings + lost_strings)
 
     print("欠損文字")
-    for i in lost_strings:
-        print("{:3s}".format(chr(i)), end="")
-    print("")
+    output_string(lost_strings)
 
     print("表示文字")
-    for i in taget_strings:
-        print("{:3s}".format(chr(i)), end="")
-    print("")
+    output_string(taget_strings)
 
     n = int(input("欠損文字はいくつあるでしょう?"))
     if n == len(lost_strings):
@@ -46,6 +41,11 @@ def main():
             print("-", end="")
         print("")
 
+def output_string(l):
+    for i in l:
+        print("{:3s}".format(chr(i)), end="")
+    print("")
+
 # 欠損文字の入力を求めて実際の文字と適合しているか確認する関数
 def string_ans(lost_strings):
     ansers = []
@@ -55,10 +55,10 @@ def string_ans(lost_strings):
         ansers.append(ord(i))
 
     # 欠損文字にヒットする度に1足していく
-    status = 0
+    status = NOHIT
     for a in ansers:
         if (a in lost_strings):
-            status += 1
+            status += HIT
         else:
             continue
 
