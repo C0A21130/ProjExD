@@ -1,6 +1,9 @@
 from random import randint
 import datetime
 
+HIT = 1
+NOHIT = 0
+
 def main():
     start = datetime.datetime.now() # 始まる時間を記録
     question, anser = shutudai()    # 問題とそれに対する答えを返す
@@ -20,14 +23,14 @@ def shutudai():
 
 def kaito(question, anser):
     i = input(question)
-    hit = 0               # 答えがあっていれば間違っていれば0、合っていれば1になる
+    status = NOHIT   # 答えがあっていれば間違っていればNOHIT、合っていればHITになる
     if i in anser:
-        hit = 1
+        status = HIT
 
-    if (hit==1):
+    if (status==HIT):
         print("正解")
     else:
-        print("不正解")
+        print("出直してこい")
 
 if __name__ == "__main__":
     main()
