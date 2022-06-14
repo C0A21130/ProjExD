@@ -40,9 +40,6 @@ def put():
     print("対象文字")
     output_string(taget_strings + lost_strings)
 
-    print("欠損文字")
-    output_string(lost_strings)
-
     print("表示文字")
     output_string(taget_strings)
 
@@ -67,8 +64,6 @@ def string_ans(lost_strings):
     for a in ansers:
         if (a in lost_strings):
             status += HIT
-        else:
-            continue
 
     # 実際に欠損した文字数と入力してヒットした文字数が一致したときに正解を返す
     if (status == LOST_STRING_NUM):
