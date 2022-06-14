@@ -19,11 +19,10 @@ def shutudai():
     return questions[question_number], ansers[question_number]
 
 def kaito(question, anser):
-    inp = input(question)
+    i = input(question)
     hit = 0               # 答えがあっていれば間違っていれば0、合っていれば1になる
-    for i in anser:
-        if i == inp:
-            hit = 1
+    if i in anser:
+        hit = 1
 
     if (hit==1):
         print("正解")
