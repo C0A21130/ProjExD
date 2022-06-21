@@ -1,15 +1,20 @@
 # tkinterのモジュールをインポートする
+from itertools import count
 import tkinter as tk
 import tkinter.messagebox as tkm
+
 
 def main():
 
     def button_click(event):
         btn = event.widget
         txt = btn["text"]
-        print(txt)
         entry.insert(tk.END, int(txt))
-
+        
+    def plus_button_click(event):
+        btn = event.widget
+        txt = btn["text"]
+        tkm.showwarning("",f"{txt}")
     
     # tkクラスからアプリの基本となるインスタンスを作成
     root = tk.Tk()
@@ -38,6 +43,15 @@ def main():
             c += 1
         button.grid(row=r, column=c)
         button.bind("<1>", button_click)
+    
+    plus_button = tk.Button(root,
+                        width=4,
+                        height=2,
+                        text="+",
+                        font=("Times New Roman", 30)
+                        )
+    plus_button.grid(row=5, column=1)
+    plus_button.bind("<1>", plus_button_click)
 
     root.mainloop()
 
