@@ -2,18 +2,25 @@
 import tkinter as tk
 import tkinter.messagebox as tkm
 
-
-def button_click(event):
-    btn = event.widget
-    txt = btn["text"]
-    tkm.showwarning("警告", f"{txt}のボタンがクリックされました")
-
-
 def main():
+
+    def button_click(event):
+        btn = event.widget
+        txt = btn["text"]
+        print(txt)
+        entry.insert(tk.END, int(txt))
+
+    
     # tkクラスからアプリの基本となるインスタンスを作成
     root = tk.Tk()
     root.title("計算機")
     root.geometry("300x600")
+
+    entry = tk.Entry(justify="right",
+                    width=10,
+                    font=("Times New Roman",40)
+                    )
+    entry.grid(row=0, column=0, columnspan=3)
     
     r = 1
     c = 0
@@ -31,14 +38,9 @@ def main():
             c += 1
         button.grid(row=r, column=c)
         button.bind("<1>", button_click)
-    
-    entry = tk.Entry(justify="right",
-                    width=10,
-                    font=("Times New Roman",40)
-                    )
-    entry.grid(row=0, column=0, columnspan=3)
-    
+
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
