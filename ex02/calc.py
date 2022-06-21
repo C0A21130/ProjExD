@@ -18,18 +18,23 @@ def main():
             entry.insert(tk.END, int(result))
         elif txt == "^2":
             formula = int(entry.get())
-            print(formula)
             result = formula ** 2
             entry.delete(0, tk.END)
             entry.insert(tk.END, int(result))
         elif txt == "^(1/2)":
             formula = int(entry.get())
-            print(formula)
             result = formula ** (1/2)
             entry.delete(0, tk.END)
             entry.insert(tk.END, int(result))
         else:
             entry.insert(tk.END, int(txt))
+            formula = int(entry.get())
+            if formula == 123456789:
+                entry.delete(0, tk.END)
+                entry.insert(tk.END, "なぜ( ﾟДﾟ)")
+            elif formula == 999:
+                entry.delete(0, tk.END)
+                tkm.showwarning("脱出", "あなたは開発者と認めましょう鍵は123456789")
     
 
     # tkクラスからアプリの基本となるインスタンスを作成
@@ -101,6 +106,7 @@ def main():
                             )
     square_button.grid(row=3, column=4)
     square_button.bind("<1>", button_click)
+
     root.mainloop()
 
 
