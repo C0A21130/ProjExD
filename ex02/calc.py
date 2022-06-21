@@ -6,7 +6,7 @@ import datetime
 
 def main():
     rand = randint(1000, 10000)
-    d = datetime.datetime.now()
+    d = datetime.datetime.now() # 現在の日時を取得する
     # ボタンを入力したときの動作
     def button_click(event):
         btn = event.widget
@@ -18,7 +18,7 @@ def main():
             result = eval(formula)
             entry.delete(0, tk.END)
             entry.insert(tk.END, int(result))
-            dt = f"{d.month}+{d.day}"
+            dt = f"{d.month}+{d.day}" # 現在の日時を足し算の式で表す
             if str(formula) == dt:
                 tkm.showwarning("おめでとう", f"お誕生日おめでとう")
         elif txt == "^2":
