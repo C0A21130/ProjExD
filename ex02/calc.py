@@ -21,12 +21,6 @@ def main():
             dt = f"{d.month}+{d.day}" # 現在の日時を足し算の式で表す
             if str(formula) == dt:
                 tkm.showwarning("おめでとう", f"お誕生日おめでとう")
-        elif txt == "^2":
-            formula = int(entry.get())
-            result = formula ** 2
-            entry.delete(0, tk.END)
-            entry.insert(tk.END, int(result))
-
         else:
             entry.insert(tk.END, int(txt))
             formula = int(entry.get())  
@@ -40,7 +34,6 @@ def main():
     def expo(event):
         btn = event.widget
         txt = btn["text"]
-        txt == "^2"
         formula = int(entry.get())
         result = formula ** 2
         entry.delete(0, tk.END)
@@ -49,7 +42,6 @@ def main():
     def ro(event):
         btn = event.widget
         txt = btn["text"]
-        txt == "^(1/2)"
         formula = int(entry.get())
         result = formula ** (1/2)
         entry.delete(0, tk.END)
@@ -120,7 +112,7 @@ def main():
     square_button = tk.Button(root,
                             width=4,
                             height=2,
-                            text="^(1/2)",
+                            text="√",
                             font=("Times New Roman", 30)
                             )
     square_button.grid(row=3, column=4)
