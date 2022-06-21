@@ -5,7 +5,7 @@ from random import randint
 import datetime
 
 def main():
-    rand = randint(1000, 10000)
+    key = randint(1000, 10000)
     d = datetime.datetime.now() # 現在の日時を取得する
     # ボタンを入力したときの動作
     def button_click(event):
@@ -30,12 +30,12 @@ def main():
         else:
             entry.insert(tk.END, int(txt))
             formula = int(entry.get())  
-            if formula == rand:
+            if formula == key:
                 entry.delete(0, tk.END)
                 entry.insert(tk.END, "なぜ( ﾟДﾟ)")
             elif formula == 999:
                 entry.delete(0, tk.END)
-                tkm.showwarning("脱出", f"あなたは開発者と認めましょう鍵は{rand}")
+                tkm.showwarning("脱出", f"あなたは開発者と認めましょう鍵は{key}")
         
     def expo(event):
         btn = event.widget
