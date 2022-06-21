@@ -26,11 +26,7 @@ def main():
             result = formula ** 2
             entry.delete(0, tk.END)
             entry.insert(tk.END, int(result))
-        elif txt == "^(1/2)":
-            formula = int(entry.get())
-            result = formula ** (1/2)
-            entry.delete(0, tk.END)
-            entry.insert(tk.END, int(result))
+
         else:
             entry.insert(tk.END, int(txt))
             formula = int(entry.get())  
@@ -40,7 +36,25 @@ def main():
             elif formula == 999:
                 entry.delete(0, tk.END)
                 tkm.showwarning("脱出", f"あなたは開発者と認めましょう鍵は{rand}")
-    
+        
+    def expo(event):
+        btn = event.widget
+        txt = btn["text"]
+        txt == "^2"
+        formula = int(entry.get())
+        result = formula ** 2
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, int(result))
+
+    def ro(event):
+        btn = event.widget
+        txt = btn["text"]
+        txt == "^(1/2)"
+        formula = int(entry.get())
+        result = formula ** (1/2)
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, int(result))
+
 
     # tkクラスからアプリの基本となるインスタンスを作成
     root = tk.Tk()
@@ -100,7 +114,7 @@ def main():
                             font=("Times New Roman", 30)
                             )
     square_button.grid(row=2, column=4)
-    square_button.bind("<1>", button_click)
+    square_button.bind("<1>", expo)
 
     # 平方根のボタンを作成する
     square_button = tk.Button(root,
@@ -110,7 +124,7 @@ def main():
                             font=("Times New Roman", 30)
                             )
     square_button.grid(row=3, column=4)
-    square_button.bind("<1>", button_click)
+    square_button.bind("<1>", ro)
 
     root.mainloop()
 
