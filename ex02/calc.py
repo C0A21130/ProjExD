@@ -1,5 +1,13 @@
 # tkinterのモジュールをインポートする
 import tkinter as tk
+import tkinter.messagebox as tkm
+
+
+def button_click(event):
+    btn = event.widget
+    txt = btn["text"]
+    tkm.showwarning("警告",f"{txt}のボタンがクリックされました")
+
 
 def main():
     # tkクラスからアプリの基本となるインスタンスを作成
@@ -22,6 +30,7 @@ def main():
         else:
             c += 1
         button.grid(row=r, column=c)
+        button.bind("<1>", button_click)
     
     root.mainloop()
 
