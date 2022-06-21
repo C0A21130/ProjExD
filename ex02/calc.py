@@ -3,10 +3,9 @@ from itertools import count
 import tkinter as tk
 import tkinter.messagebox as tkm
 
-
 def main():
     
-    # ボタン以外を入力したときの動作
+    # ボタンを入力したときの動作
     def button_click(event):
         btn = event.widget
         txt = btn["text"]
@@ -17,6 +16,18 @@ def main():
             result = eval(formula)
             entry.delete(0, tk.END)
             entry.insert(tk.END, int(result))
+        elif txt == "^2":
+            formula = int(entry.get())
+            print(formula)
+            result = formula ** 2
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, int(result))
+        elif txt == "^(1/2)":
+            formula = int(entry.get())
+            print(formula)
+            result = formula ** (1/2)
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, int(result))
         else:
             entry.insert(tk.END, int(txt))
     
@@ -24,7 +35,7 @@ def main():
     # tkクラスからアプリの基本となるインスタンスを作成
     root = tk.Tk()
     root.title("計算機")
-    root.geometry("300x600")
+    root.geometry("400x600")
 
     # 数字を表示する画面を作成する
     entry = tk.Entry(justify="right",
@@ -61,6 +72,7 @@ def main():
     plus_button.grid(row=5, column=1)
     plus_button.bind("<1>", button_click)
 
+    # イコールボタンを作成する
     equal_button = tk.Button(root,
                         width=4,
                         height=2,
@@ -70,6 +82,25 @@ def main():
     equal_button.grid(row=5, column=2)
     equal_button.bind("<1>", button_click)
 
+    # 二乗のボタンを作成する
+    square_button = tk.Button(root,
+                            width=4,
+                            height=2,
+                            text="^2",
+                            font=("Times New Roman", 30)
+                            )
+    square_button.grid(row=2, column=4)
+    square_button.bind("<1>", button_click)
+
+    # 平方根のボタンを作成する
+    square_button = tk.Button(root,
+                            width=4,
+                            height=2,
+                            text="^(1/2)",
+                            font=("Times New Roman", 30)
+                            )
+    square_button.grid(row=3, column=4)
+    square_button.bind("<1>", button_click)
     root.mainloop()
 
 
