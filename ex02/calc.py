@@ -1,12 +1,12 @@
 # tkinterのモジュールをインポートする
-from itertools import count
 import tkinter as tk
 import tkinter.messagebox as tkm
 from random import randint
+import datetime
 
 def main():
     rand = randint(1000, 10000)
-
+    d = datetime.datetime.now()
     # ボタンを入力したときの動作
     def button_click(event):
         btn = event.widget
@@ -18,6 +18,9 @@ def main():
             result = eval(formula)
             entry.delete(0, tk.END)
             entry.insert(tk.END, int(result))
+            dt = f"{d.month}+{d.day}"
+            if str(formula) == dt:
+                tkm.showwarning("おめでとう", f"お誕生日おめでとう")
         elif txt == "^2":
             formula = int(entry.get())
             result = formula ** 2
@@ -30,7 +33,7 @@ def main():
             entry.insert(tk.END, int(result))
         else:
             entry.insert(tk.END, int(txt))
-            formula = int(entry.get())
+            formula = int(entry.get())  
             if formula == rand:
                 entry.delete(0, tk.END)
                 entry.insert(tk.END, "なぜ( ﾟДﾟ)")
