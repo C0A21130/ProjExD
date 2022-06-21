@@ -2,9 +2,11 @@
 from itertools import count
 import tkinter as tk
 import tkinter.messagebox as tkm
+from random import randint
 
 def main():
-    
+    rand = randint(1000, 10000)
+
     # ボタンを入力したときの動作
     def button_click(event):
         btn = event.widget
@@ -29,12 +31,12 @@ def main():
         else:
             entry.insert(tk.END, int(txt))
             formula = int(entry.get())
-            if formula == 123456789:
+            if formula == rand:
                 entry.delete(0, tk.END)
                 entry.insert(tk.END, "なぜ( ﾟДﾟ)")
             elif formula == 999:
                 entry.delete(0, tk.END)
-                tkm.showwarning("脱出", "あなたは開発者と認めましょう鍵は123456789")
+                tkm.showwarning("脱出", f"あなたは開発者と認めましょう鍵は{rand}")
     
 
     # tkクラスからアプリの基本となるインスタンスを作成
