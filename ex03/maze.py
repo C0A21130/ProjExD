@@ -19,13 +19,13 @@ def main_proc():
     stride = 100 # こうかとんの歩幅
 
     # 押したキーによって移動先を変更する
-    if key == "Up":
+    if key == "Up": # キーボードの上キーを押したことを検知する
         my = (my-1) if maze_lst[my-1][mx] == 0 or maze_lst[my-1][mx]==2 else my
-    elif key == "Down":
+    elif key == "Down": # キーボードの下キーを押したことを検知する
         my = (my+1) if maze_lst[my+1][mx] == 0 or maze_lst[my+1][mx]==2 else my
-    elif key == "Left":
+    elif key == "Left": # キーボードの左キーを押したことを検知する
         mx = (mx-1) if maze_lst[my][mx-1] == 0 or maze_lst[my][mx-1]==2 else mx
-    elif key == "Right":
+    elif key == "Right": # キーボードの右キーを押したことを検知する
         mx = (mx+1) if maze_lst[my][mx+1] == 0 or maze_lst[my][mx+1]==2 else mx
     
     # こうかとんの現在位置が決まる
