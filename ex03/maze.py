@@ -1,4 +1,5 @@
 import tkinter as tk
+import maze_maker
 
 # 押されたキーを読み取りグローバル変数keyに代入する関数
 def key_down(event):
