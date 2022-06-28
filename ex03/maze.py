@@ -1,7 +1,10 @@
-from sympy import im
-
-
 import tkinter as tk
+
+# 押されたキーを読み取り表示する関数
+def key_down(event):
+    global key
+    key = event.keysym
+    print(key)
 
 if __name__ == "__main__":
     # ウィンドウの生成
@@ -19,5 +22,8 @@ if __name__ == "__main__":
     canvas.create_image(cx, cy, imag=tori, tag="tori")
 
     key = ""  # グローバル変数keyを空文字で初期化する
+
+    # キーを押されたときにkey_down関数を呼び出すようにする
+    root.bind("<KeyPress>", key_down)
 
     root.mainloop()
