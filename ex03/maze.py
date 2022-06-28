@@ -40,6 +40,12 @@ if __name__ == "__main__":
     canvas = tk.Canvas(root, width=1500, height=900, bg="black")
     canvas.pack()
 
+    # maze_makerモジュールのmake_maze関数を使って15x9マスの迷路の配列を生成する
+    maze_lst = maze_maker.make_maze(15, 9)
+
+    # maze_makerモジュールのshow_maze関数を使って背景の迷路を描画する
+    maze_maker.show_maze(canvas, maze_lst)
+
     # こうかとんインスタンスを生成して表示する
     tori = tk.PhotoImage(file="fig/8.png")
     cx,cy = 300, 400 # こうかとんの座標(x, y)
@@ -52,9 +58,6 @@ if __name__ == "__main__":
 
     # キーを話したときにkey_up関数を呼び出すようにする
     root.bind("<KeyRelease>", key_up)
-
-    # maze_makerモジュールのmake_maze関数を使って15x9マスの迷路を生成する
-    maze_lst = maze_maker.make_maze(15, 9)
 
     update_time = 100 #更新する秒数
     # 常時main_proc関数を呼び出す
