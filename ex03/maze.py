@@ -1,10 +1,15 @@
 import tkinter as tk
+from turtle import goto
 
 # 押されたキーを読み取り表示する関数
 def key_down(event):
     global key
     key = event.keysym
     print(key)
+
+def key_up(event):
+    global key
+    key = ""
 
 if __name__ == "__main__":
     # ウィンドウの生成
@@ -25,5 +30,8 @@ if __name__ == "__main__":
 
     # キーを押されたときにkey_down関数を呼び出すようにする
     root.bind("<KeyPress>", key_down)
+
+    # キーを話したときにkey_up関数を呼び出すようにする
+    root.bind("<KeyRelease>", key_up)
 
     root.mainloop()
