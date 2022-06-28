@@ -15,7 +15,9 @@ if __name__ == "__main__":
 
     # こうかとんインスタンスを生成して表示する
     tori = tk.PhotoImage(file="fig/8.png")
-    cx,cy = 300, 400
+    cx,cy = 300, 400 # こうかとんの座標(x, y)
     canvas.create_image(cx, cy, imag=tori, tag="tori")
+
+    key = ""  # グローバル変数keyを空文字で初期化する
 
     root.mainloop()
