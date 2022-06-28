@@ -5,7 +5,6 @@ import maze_maker
 def key_down(event):
     global key
     key = event.keysym
-    print(key)
 
 # グローバル変数keyに空文字を代入する関数
 def key_up(event):
@@ -14,16 +13,18 @@ def key_up(event):
 
 # 常時起動する関数
 def main_proc():
-    global cx, cy
-    stride = 20 # こうかとんの歩幅
+    global cx, cy, mx, my
+    stride = 100 # こうかとんの歩幅
     if key == "Up":
-        cy -= stride
+        my -= 1
     elif key == "Down":
-        cy += stride
+        my += 1
     elif key == "Left":
-        cx -= stride
+        mx -= 1
     elif key == "Right":
-        cx += stride
+        mx += 1
+    cx = 50 + mx * stride
+    cy = 50 + my * stride
 
     # 変更した数値で後進する
     canvas.coords("tori", cx, cy)
@@ -48,7 +49,8 @@ if __name__ == "__main__":
 
     # こうかとんインスタンスを生成して表示する
     tori = tk.PhotoImage(file="fig/8.png")
-    cx,cy = 300, 400 # こうかとんの座標(x, y)
+    mx, my = 1, 1     # こうかとんのいるマス(x, y)
+    cx, cy = 250, 350 # こうかとんの座標(x, y)
     canvas.create_image(cx, cy, imag=tori, tag="tori")
 
     key = ""  # グローバル変数keyを空文字で初期化する
@@ -61,6 +63,6 @@ if __name__ == "__main__":
 
     update_time = 100 #更新する秒数
     # 常時main_proc関数を呼び出す
-    root.after(update_time, main_proc())
+    root.after(update_time, main_proc)
 
     root.mainloop()
