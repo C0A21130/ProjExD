@@ -53,8 +53,11 @@ if __name__ == "__main__":
     # キーを話したときにkey_up関数を呼び出すようにする
     root.bind("<KeyRelease>", key_up)
 
+    # maze_makerモジュールのmake_maze関数を使って15x9マスの迷路を生成する
+    maze_lst = maze_maker.make_maze(15, 9)
+
     update_time = 100 #更新する秒数
     # 常時main_proc関数を呼び出す
-    root.after(update_time, main_proc()) 
+    root.after(update_time, main_proc())
 
     root.mainloop()
