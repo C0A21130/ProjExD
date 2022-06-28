@@ -15,18 +15,22 @@ def key_up(event):
 def main_proc():
     global cx, cy, mx, my
     stride = 100 # こうかとんの歩幅
+
+    # 押したキーによって移動先を変更する
     if key == "Up":
-        my -= 1
+        my = my if maze_lst[my-1][mx] else (my - 1)
     elif key == "Down":
-        my += 1
+        my = my if maze_lst[my+1][mx] else (my + 1)
     elif key == "Left":
-        mx -= 1
+        mx = mx if maze_lst[my][mx-1] else (mx - 1)
     elif key == "Right":
-        mx += 1
+        mx = mx if maze_lst[my][mx+1] else (mx + 1)
+    
+    # こうかとんの現在位置が決まる
     cx = 50 + mx * stride
     cy = 50 + my * stride
 
-    # 変更した数値で後進する
+    # 変更した数値で更新する
     canvas.coords("tori", cx, cy)
     root.after(update_time, main_proc)
 
@@ -49,8 +53,8 @@ if __name__ == "__main__":
 
     # こうかとんインスタンスを生成して表示する
     tori = tk.PhotoImage(file="fig/8.png")
-    mx, my = 1, 1     # こうかとんのいるマス(x, y)
-    cx, cy = 250, 350 # こうかとんの座標(x, y)
+    mx, my = 1, 1 # こうかとんのいるマス(x, y)
+    cx, cy = 0, 0 # こうかとんの座標(x, y)
     canvas.create_image(cx, cy, imag=tori, tag="tori")
 
     key = ""  # グローバル変数keyを空文字で初期化する
