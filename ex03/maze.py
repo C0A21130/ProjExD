@@ -63,9 +63,9 @@ def create_goal():
 #　こうかとんがゴールにたどり着いたことを確認する関数
 def check_goal():
     global count
-    if maze_lst[my][mx]==2 and count==0:
-        tkm.showinfo("クリアー", "あなたはゴールしました")
+    if maze_lst[my][mx]==2:
         create_goal()
+        tkm.showinfo("クリアー", "あなたはゴールしました")
 
 
 if __name__ == "__main__":
