@@ -61,7 +61,6 @@ def main():
 
         # 30秒経過したらクリアと表示する
         if int(pg.time.get_ticks()) > 10000:
-            print("HElLO")
             Cfonto = pg.font.Font(None, 80)
             Ctxt = Cfonto.render(f"{comment}CLEAR", True, (0, 0, 0))
             screen_sfc.blit(Ctxt, (50, 150))
