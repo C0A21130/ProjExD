@@ -68,6 +68,8 @@ def main():
         if((int(pg.time.get_ticks()) % 1000) < 100):
             bsize += 0.5
             bom_sfc = pg.Surface((bsize, bsize))
+            star_sfc.set_colorkey((0, 0, 0))
+            pg.draw.circle(bom_sfc, (255, 0, 0), (bsize/2, bsize/2), bsize/2)
         # 5秒経過後スターが表示される
         if(int(pg.time.get_ticks()) > 5000 and point==0):
             point = 1 
