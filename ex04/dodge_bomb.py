@@ -49,6 +49,9 @@ def main():
             if key_status[pg.K_DOWN]  == True: kkimg_rct.centery -= 1
             if key_status[pg.K_LEFT]  == True: kkimg_rct.centerx += 1
             if key_status[pg.K_RIGHT] == True: kkimg_rct.centerx -= 1
+        if kkimg_rct.colliderect(bom_rct):
+            return 
+            
         screen_sfc.blit(kkimg_sfc, kkimg_rct)
 
         # 爆弾を移動させる
@@ -60,6 +63,8 @@ def main():
 
         # 爆弾を生成する
         screen_sfc.blit(bom_sfc, bom_rct)
+        
+        
 
         pg.display.update()
         clock.tick(1000)
