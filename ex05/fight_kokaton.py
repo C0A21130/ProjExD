@@ -1,4 +1,3 @@
-from ctypes import pointer
 import pygame as pg
 import sys
 import random
@@ -53,8 +52,8 @@ class Bird:
                 self.rct.centerx -= 1
         self.blit(scr)
     
-    # ビームを表示する関数
-    def attack(self, scr, bomb, coment):
+    # ビームを表示する関数 
+    def attack(self, scr, bomb):
         b = Beam(self.rct)
         b.blit(scr)
         # b.check(bomb, coment)
