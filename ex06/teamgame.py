@@ -111,6 +111,7 @@ def check_bound(rct, scr_rct):
 
 
 def main():
+    sound() #sound関数の反映
     clock = pg.time.Clock()  # 時間計測用のオブジェクト
     screen = Screen("", (700, 900), "fig/pg_bg.jpg") # スクリーンを生成する
     screen.blit()
@@ -151,6 +152,12 @@ def main():
         
         pg.display.update()   # 画面を更新する
         clock.tick(1000)
+
+def sound():
+    pg.mixer.init(frequency = 44100)    # 初期設定
+    pg.mixer.music.load("fig/test.mp3")     # 音楽ファイルの読み込み
+    pg.mixer.music.play(1)              # 音楽の再生回数(1回)
+    #bgmの作製(山本琢未)
 
 
 if __name__ == "__main__":
