@@ -3,6 +3,7 @@ import pygame as pg     # pygameモジュールをpgとして読み込む
 from random import randint     # randomモジュール内にあるrandint関数を読み込む
 
 bar_num = 5  # 落ちてくる障害物の最大数
+rz_num=10 #弾数　初期値１０(金成斌)
 
 # Screen クラスを定義
 class Screen:
@@ -40,6 +41,25 @@ class Player:
             if key_states[pg.K_RIGHT]:
                 self.rct.centerx -= 1.0
         self.blit(scr)
+
+
+class Razer: #レーザーを描画(金成斌)
+    def __init__(self,size,color,rz_num,scr:Screen,player):
+        self.vy = -1
+        self.sfc = pg.Surface(size)
+        pg.Surface.fill(self.sfc, color)
+        self.rct = self.sfc.get_rect()
+        self.rct.centerx = player.rct.centerx
+        self.rct.centery = player.rct.centery
+        self.w, self.h = size
+        self.a = 0
+
+    def blit(self, scr: Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr: Screen):
+        self.rct.move_ip(0, self.vy)
+        scr.sfc.blit(self.sfc, self.rct)
 
 
 # 上から下にバーが落ちてくるオブジェクトを生成するクラス
@@ -111,6 +131,7 @@ def check_bound(rct, scr_rct):
 
 
 def main():
+    key_states = pg.key.get_pressed()
     clock = pg.time.Clock()  # 時間計測用のオブジェクト
     screen = Screen("", (700, 900), "fig/pg_bg.jpg") # スクリーンを生成する
     screen.blit()
@@ -127,6 +148,12 @@ def main():
     # メダルをクラスから生成する
     medal = Medal(screen)
     medal.blit(screen)
+
+    #レーザーのリスト、弾数の数分リストにレーザーを入れる(金成斌)
+    rz_list=[]
+    for i in range(rz_num):
+        rz_list.append(Razer((10,20),(255,0,0),rz_num,screen,player))
+    x=0
 
     # 常にゲームを動かす
     while True:
@@ -148,6 +175,23 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
+            if event.type==pg.KEYDOWN: #キーが押されているならば
+                if event.key==pg.K_SPACE:
+                    x+=1
+                    if len(rz_list)>0: #リストに中身があるならレーザーを取り出す(金成斌) 
+                        a=rz_list.pop(0)
+                        a.rct.centerx = player.rct.centerx
+                        a.blit(screen)
+
+        if x>0: #レーザーが発射され、バーに当たるとバーとレーザーのｘ座標を変える(金成斌)
+            a.update(screen)
+            for i in bars:
+                if a.rct.colliderect(i.rct):
+                    a.rct.centerx=1000
+                    i.rct.centerx=1000
+        player.update(screen)
+        for bar in bars:
+            bar.update(screen)
         
         pg.display.update()   # 画面を更新する
         clock.tick(1000)
