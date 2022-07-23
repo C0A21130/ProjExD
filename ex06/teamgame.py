@@ -67,7 +67,7 @@ class Bar:
             self.rct.width = randint(80, self.w)
         scr.sfc.blit(self.sfc, self.rct)
 
-# メダルを生成するクラス
+# メダルを生成するクラス 安野裕貴
 class Medal:
     def __init__(self, scr):
         self.sfc = pg.Surface((100, 100))
@@ -131,6 +131,9 @@ def check_bound(rct, scr_rct):
 
 
 def main():
+    # 山本琢未
+    sound() #sound関数の反映
+    
     # 岡田
     global rz_num, HP
     inv_point = 0 # 無敵ゲージを0で初期化
@@ -148,10 +151,8 @@ def main():
     for i in range(bar_num):
         bars[i] = Bar((120, 30), (0,0,0), screen)
         bars[i].blit(screen)
-    # bar = Bar((30, 30), (125, 125, 125), screen)
-    # bar.blit(screen)
 
-    # メダルをクラスから生成する
+    # メダルをクラスから生成する 安野裕貴
     medal = Medal(screen)
     medal.blit(screen)
 
@@ -226,6 +227,13 @@ def main():
         
         pg.display.update()   # 画面を更新する
         clock.tick(1000)
+
+# 山本琢未
+def sound():
+    pg.mixer.init(frequency = 44100)    # 初期設定
+    pg.mixer.music.load("fig/test.mp3")     # 音楽ファイルの読み込み
+    pg.mixer.music.play(1)              # 音楽の再生回数(1回)
+    #bgmの作製(山本琢未)
 
 
 if __name__ == "__main__":
