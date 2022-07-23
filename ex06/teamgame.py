@@ -5,7 +5,7 @@ from random import randint     # randomモジュール内にあるrandint関数�
 BARS_NUM = 5  # 落ちてくる障害物の最大数
 INIT_ITEM_POSITION_X = -30 # アイテムの初期位置
 
-# 玉数の実装のための変数:岡田
+# 玉数の実装のための変数
 rz_num = 10 # 弾数を1000で初期化
 
 # スコアを計算するための変数:横井
@@ -47,6 +47,25 @@ class Player:
             if key_states[pg.K_RIGHT]:
                 self.rct.centerx -= 1.0
         self.blit(scr)
+
+
+class Razer: #レーザーを描画(金成斌)
+    def __init__(self,size,color,rz_num,scr:Screen,player):
+        self.vy = -1
+        self.sfc = pg.Surface(size)
+        pg.Surface.fill(self.sfc, color)
+        self.rct = self.sfc.get_rect()
+        self.rct.centerx = player.rct.centerx
+        self.rct.centery = player.rct.centery
+        self.w, self.h = size
+        self.a = 0
+
+    def blit(self, scr: Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr: Screen):
+        self.rct.move_ip(0, self.vy)
+        scr.sfc.blit(self.sfc, self.rct)
 
 
 # 上から落ちてくるバーを生成するクラス
@@ -175,6 +194,8 @@ def main():
     inv_point = 0 # 無敵ゲージを0で初期化
     inv = False   # 無敵かどうかの判定する変数
     st = 0        # 無敵の開始時刻を保存する変数
+    # 弾を打つための変数:金
+    key_states = pg.key.get_pressed()
 
     clock = pg.time.Clock() # 時間計測用のオブジェクト
 
@@ -194,6 +215,12 @@ def main():
     # メダルを生成:安野
     medal = Medal(screen)
     medal.blit(screen)
+
+    #レーザーのリスト、弾数の数分リストにレーザーを入れる:金成斌
+    rz_list=[]
+    for i in range(rz_num):
+        rz_list.append(Razer((10,20),(255,0,0),rz_num,screen,player))
+    x=0
 
     # 画面に表示するテキストを生成:横井
     time_text = Text(f"Time:{time: .1f}", (10, 10))
@@ -288,6 +315,27 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
+               
+            # スペースキーを押したときに弾を打つ:金
+            if event.type==pg.KEYDOWN: #キーが押されているならば
+                if event.key==pg.K_SPACE:
+                    x+=1
+                    if len(rz_list)>0: #リストに中身があるならレーザーを取り出す
+                        a=rz_list.pop(0)
+                        a.rct.centerx = player.rct.centerx
+                        a.blit(screen)
+
+        if x>0: #レーザーが発射され、バーに当たるとバーとレーザーのｘ座標を変える:金
+            a.update(screen)
+            for i in bars:
+                if a.rct.colliderect(i.rct):
+                    a.rct.centerx=1000
+                    i.rct.centerx=1000
+         
+        # 変更の必要があり?
+        player.update(screen)
+        for bar in bars:
+            bar.update(screen)
                 
             # 岡田
             if event.type == pg.KEYDOWN:
