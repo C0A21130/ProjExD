@@ -1,15 +1,14 @@
 import sys                     # sysモジュールを読み込む
 import pygame as pg            # pygameモジュールをpgとして読み込む
+import random
 from random import randint     # randomモジュール内にあるrandint関数を読み込む
 
 BARS_NUM = 5  # 落ちてくる障害物の最大数
 INIT_ITEM_POSITION_X = -30 # アイテムの初期位置
+# FALL_SPEED = 
 
-# 玉数の実装のための変数
+# 弾数の実装のための変数
 rz_num = 10 # 弾数を1000で初期化
-
-# スコアを計算するための変数:横井
-HP = 500     # HPを500で初期化
 
 # メインの画面を生成するクラス
 class Screen:
@@ -26,11 +25,13 @@ class Screen:
 
 # 自身の操作するPlayerを生成するクラス
 class Player:
-    def __init__(self, image, size, xy):    # image:画像ファイル名, size:拡大率, xy:初期座標タプル
+    # image:画像ファイル名, size:拡大率, xy:初期座標タプル, hp:体力
+    def __init__(self, image, size, xy, hp):
         self.sfc = pg.image.load(image)                        # Surface
         self.sfc = pg.transform.rotozoom(self.sfc, 0, size)    # Surface
         self.rct = self.sfc.get_rect()                         # Rect
         self.rct.center = xy    # こうかとんを表示する座標をxyに設定
+        self.hp = hp
     
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -49,7 +50,8 @@ class Player:
         self.blit(scr)
 
 
-class Razer: #レーザーを描画(金成斌)
+#レーザーを描画:金
+class Razer: 
     def __init__(self,size,color,rz_num,scr:Screen,player):
         self.vy = -1
         self.sfc = pg.Surface(size)
@@ -78,7 +80,7 @@ class Bar:
         self.rct.centery = -randint(0, 500)
         self.w, self.h = size
         self.rct.width = randint(80, self.w)
-        self.vy  = 1
+        self.vy  = 1.2
     
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -99,25 +101,24 @@ class Medal:
         self.sfc.set_colorkey((0, 0, 0))
         pg.draw.circle(self.sfc, (255, 255, 0), (50, 50), 50)
         self.rct = self.sfc.get_rect()
-        self.rct.centerx = randint(0, scr.rct.width)
+        self.rct.centerx = random.randint(0, scr.rct.width)
         self.rct.centery = randint(0, scr.rct.height)
 
     def blit(self, scr):
         scr.sfc.blit(self.sfc, self.rct)
 
-    def update(self, scr):
+    def update(self, scr, time):
         self.rct.move_ip(0, 1)
-        if self.rct.centery > scr.rct.height:
-            self.rct.centerx = randint(0, scr.rct.width-self.rct.width)
-            self.rct.centery = -randint(0, 500)
         self.blit(scr)
+        if (time % 15 < 0.01) and (not (-self.rct.width < self.rct.centery < scr.rct.width)):
+            self.rct.centerx = randint(self.rct.width, scr.rct.width-self.rct.width)
+            self.rct.centery = random.randint(-2000, -100)
 
     # メダルがプレイやーかレーザーにぶつかったときにスコアを増やすように命令する
     def check_hit(self, player, scr):
         if self.rct.colliderect(player.rct):
-            # if self.rct.colliderect(player.rct) or self.rct.colliderect("razerオブジェクト"):
-            self.rct.centerx = randint(0, scr.rct.width-self.rct.width)
-            self.rct.centery = -randint(0, 500)
+            self.rct.centerx = randint(self.rct.width, scr.rct.width-self.rct.width)
+            self.rct.centery = random.randint(-2000, -100)
             return True
         return False
 
@@ -130,7 +131,7 @@ class Item:
         pg.draw.circle(self.sfc, color, (r, r), r)
         self.rct = self.sfc.get_rect()
         self.rct.centerx = randint(0, scr.rct.width-self.rct.width)
-        self.rct.centery = -30
+        self.rct.centery = randint(-2000, -100)
     
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -179,23 +180,25 @@ def sound():
     pg.mixer.music.load("fig/test.mp3") # 音楽ファイルの読み込み
     pg.mixer.music.play(1)              # 音楽の再生回数(1回)
 
+# アイテムやメダルをもう一度表示する
+def re_print(item, scr, time, set):
+    if (0 <= time % set < 0.01):
+        item.rct.centery = -randint(0, 50)
+        item.rct.centerx = randint(item.rct.width, scr.rct.width-item.rct.width)
 
 def main():
-    # グローバル変数:横井
-    global HP
     # グローバル変数:岡田
     global rz_num
     
-    # メダルに関する変する:横井
+    # スコアに関する変数:横井
     point = 0
+    score = 0
     # 時間に関する変数:岡田
     time = 0
     # 弾数に関する変数:岡田
     inv_point = 0 # 無敵ゲージを0で初期化
     inv = False   # 無敵かどうかの判定する変数
     st = 0        # 無敵の開始時刻を保存する変数
-    # 弾を打つための変数:金
-    key_states = pg.key.get_pressed()
 
     clock = pg.time.Clock() # 時間計測用のオブジェクト
 
@@ -207,7 +210,7 @@ def main():
     screen.blit()                                    # スクリーンの生成
 
     # 操作するキャラクターの生成
-    player = Player("fig/5.png", 1.5, (350, 848))
+    player = Player("fig/5.png", 1.5, (350, 848), 500)
     
     # 落ちてくるバーの生成
     bars = [Bar((120, 30), (0,0,0), screen) for i in range(BARS_NUM)]
@@ -216,57 +219,67 @@ def main():
     medal = Medal(screen)
     medal.blit(screen)
 
-    #レーザーのリスト、弾数の数分リストにレーザーを入れる:金成斌
-    rz_list=[]
-    for i in range(rz_num):
-        rz_list.append(Razer((10,20),(255,0,0),rz_num,screen,player))
+    #レーザーを弾の数(rz_num)だけ生成:金
+    rz_list=[Razer((10,20),(255,0,0),rz_num,screen,player) for i in range(rz_num)]
     x=0
 
     # 画面に表示するテキストを生成:横井
     time_text = Text(f"Time:{time: .1f}", (10, 10))
-    hp_text = Text(f"HP:{HP}", (500, 10))
+    hp_text = Text(f"HP:{player.hp}", (500, 10))
     score_text = Text(f"Score:{0}", (10, 80))
+    over_text = Text("GAME OVER", (170, 450)) # GAME OVERテキストの設定
 
     # 弾数を追加するアイテムを生成:岡田
     rz_plus = Item(10, (255, 0, 0), screen)
-    rz_plus.rct.centerx = INIT_ITEM_POSITION_X # 弾数追加アイテムを画面外で初期化
 
     # ライフを回復するアイテムを生成:岡田
     heal = Item(10, (0, 128, 0), screen)
-    heal.rct.centerx = INIT_ITEM_POSITION_X
+
+    # 無敵ゲージを生成:
+    inv_text = Text("X"*inv_point, (50, 150))
 
     # 常にゲームを再生し続ける
     while True:
         screen.blit()
 
-        # 無敵ゲージの表示:岡田
-        font = pg.font.Font(None, 40)
-        txt = font.render("x"*inv_point, True, (0, 0, 0)) # 
-        screen.sfc.blit(txt, (0, 150))
-        # 岡田/
-
         # スコア計算の処理:横井
         score = int(time)*500+point*10000  
+        
         # プレイヤーを更新するメソッドを呼び出す
         player.update(screen)
 
         # メダルを更新するメソッドを呼び出す:安野
-        medal.update(screen)
+        medal.update(screen, time)
 
         # バーを表示する
         for bar in bars:
             bar.update(screen)
-        
+
             # ダメージ判定を受けたときの処理:横井
-            if player.rct.colliderect(bar.rct): # こうかとんがbarに当たっているとき
+            if player.rct.colliderect(bar.rct) and (not inv): # こうかとんがbarに当たっているとき
                 damage(screen.sfc, 0.5) # 画面を赤く変化させる
-                HP -= 1 # HPが1ずつ減少
+                player.hp -= 1 # HPが1ずつ減少   
+
+        # 時間を画面上に表示する:横井
+        time_text.text = f"Time:{time: .1f}"
+        time_text.blit(screen)
+
+        # 残りのHPを画面上に表示する:横井
+        hp_text.text = f"HP:{player.hp}"
+        hp_text.blit(screen)
+
+        # スコアの結果を表示する:横井
+        score_text.text = f"Score:{score}"
+        score_text.blit(screen)
+
+        # 文字を:岡田
+        inv_text.blit(screen)
         
         # HPが0以下のときゲームを終了してそれ以外ならゲームを続行する:横井
-        if HP <= 0:
-            player = Player("fig/8.png", 1.5, (350, 390)) # 画面の真ん中にこうかとんを移動させ、固定する
-            over_txt = font.render(("GAME OVER"), True, "BLACK") # GAME OVERテキストの設定
-            screen.sfc.blit(over_txt, (170, 450)) # 画面の真ん中にGAME OVERを表示する
+        if player.hp <= 0:
+            player.hp = 0
+            player = Player("fig/8.png", 1.5, (350, 390), 0) # 画面の真ん中にこうかとんを移動させ、固定す
+            over_text.blit(screen) # 画面の真ん中にGAME OVERを表示する
             bars.clear() # 全てのbarを削除
         else:
             time = float(pg.time.get_ticks()/1000) # 時間を計測する
@@ -275,18 +288,6 @@ def main():
         if medal.check_hit(player, screen):
             point+=1
 
-        # 時間を画面上に表示する:横井
-        time_text.text = f"Time:{time: .1f}"
-        time_text.blit(screen)
-
-        # 残りのHPを画面上に表示する:横井
-        hp_text.text = f"HP:{HP}"
-        hp_text.blit(screen)
-
-        # スコアの結果を表示する:横井
-        score_text.text = f"Score:{score}"
-        score_text.blit(screen)
-
         # 岡田
         if 0 <= time % 25 <= 0.01: # 25秒おき
             rz_plus = Item(10, (255, 0, 0), screen) # 画面内に弾数追加アイテムを生成
@@ -294,10 +295,6 @@ def main():
                 while rz_plus.rct.colliderect(bar.rct):
                     rz_plus = Item(10, (255, 0, 0), screen)
         rz_plus.update(screen)
-
-        if player.rct.colliderect(rz_plus.rct): # 弾数追加の処理
-            rz_num += 3
-            rz_plus.rct.centerx = INIT_ITEM_POSITION_X
         
         if 0 <= time % 40 <= 0.01: # 40秒おき
             heal = Item(10, (0, 128, 0), screen) # 画面内に体力回復アイテムを生成
@@ -305,46 +302,48 @@ def main():
                 while heal.rct.colliderect(bar.rct):
                     heal = Item(10, (0, 128, 0), screen)
         heal.update(screen)
-
-        if player.rct.colliderect(heal.rct): # 体力回復の処理
-            HP += 100
-            heal.rct.centerx = -30
         # 岡田/
+
+        # 体力回復の処理:岡田
+        if player.rct.colliderect(heal.rct): 
+            player.hp += 100
+            heal.rct.centerx = -30
+        if player.rct.colliderect(rz_plus.rct): # 弾数追加の処理
+            for i in range(3):
+                rz_list.append(Razer((10,20),(255,0,0),rz_num,screen,player))
+            rz_plus.rct.centerx = -30
+        if player.rct.colliderect(medal.rct):
+            medal.rct.centerx = -100
+
+        if x>0: #レーザーが発射され、バーに当たるとバーとレーザーのｘ座標を変える:金
+            rz.update(screen)
+            for i in bars:
+                if rz.rct.colliderect(i.rct):
+                    rz.rct.centerx=1000
+                    i.rct.centerx=1000
+                
+            
+        if time - st > 5: # 無敵は5秒継続
+            inv = False
 
         # 画面のばつボタンをクリックしたときに終了する
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-               
-            # スペースキーを押したときに弾を打つ:金
-            if event.type==pg.KEYDOWN: #キーが押されているならば
-                if event.key==pg.K_SPACE:
-                    x+=1
-                    if len(rz_list)>0: #リストに中身があるならレーザーを取り出す
-                        a=rz_list.pop(0)
-                        a.rct.centerx = player.rct.centerx
-                        a.blit(screen)
-
-        if x>0: #レーザーが発射され、バーに当たるとバーとレーザーのｘ座標を変える:金
-            a.update(screen)
-            for i in bars:
-                if a.rct.colliderect(i.rct):
-                    a.rct.centerx=1000
-                    i.rct.centerx=1000
-         
-        # 変更の必要があり?
-        player.update(screen)
-        for bar in bars:
-            bar.update(screen)
-                
             # 岡田
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_LSHIFT and inv_point == 10:
                     inv_point = 0
                     inv = True
                     st = time # 無敵の開始時刻を保存
-        if time - st > 5: # 無敵は5秒継続
-            inv = False
+            # スペースキーを押したときに弾を打つ:金
+            if event.type==pg.KEYDOWN: #キーが押されているならば
+                if event.key == pg.K_SPACE:
+                    x+=1
+                    if len(rz_list)>0: #リストに中身があるならレーザーを取り出す
+                        rz=rz_list.pop(0)
+                        rz.rct.centerx = player.rct.centerx
+                        rz.blit(screen)
         
         pg.display.update()   # 画面を更新する
         clock.tick(1000)
