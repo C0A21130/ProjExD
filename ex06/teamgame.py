@@ -314,7 +314,7 @@ def main():
             medal.rct.centerx = -100
 
         #レーザーが発射され、バーに当たるとバーとレーザーのｘ座標を変える:金
-        if x>0: 
+        if x>0: #レーザーが撃たれていれば以下の処理を行う
             rz.update(screen)
             for bar in bars:
                 if rz.rct.colliderect(bar.rct):
@@ -339,7 +339,7 @@ def main():
             
                 # スペースキーを押したときに弾を打つ:金
                 if event.key == pg.K_SPACE:
-                    x+=1
+                    x+=1 #xは弾を撃ったかどうか判断する。これがないと弾がない状態でupdateするためエラーになる
                     if len(rz_list)>0: #リストに中身があるならレーザーを取り出す
                         rz=rz_list.pop(0)
                         rz.rct.centerx = player.rct.centerx
