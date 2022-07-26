@@ -197,7 +197,7 @@ def main():
     clock = pg.time.Clock() # 時間計測用のオブジェクト
 
     # BGMを再生する関数の呼び出し:山本
-    # sound()
+    sound()
 
     # スクリーンの生成
     screen = Screen("", (700, 900), "fig/pg_bg.jpg") # スクリーンクラスの生成
