@@ -1,21 +1,23 @@
-import sys                     # sysモジュールを読み込む
-import pygame as pg            # pygameモジュールをpgとして読み込む
+import sys
+import pygame as pg
 import random
-from random import randint     # randomモジュール内にあるrandint関数を読み込む
+from random import randint
 
-BARS_NUM = 5  # 落ちてくる障害物の最大数
+# 落ちてくる障害物の最大数
+BARS_NUM = 5  
 
 # 弾数の実装のための変数
 rz_num = 10
 
 # メインの画面を生成するクラス
 class Screen:
-    def __init__(self, title, wh, image):   # wh:幅高さタプル, image:背景画像ファイル名
+    # wh:幅高さタプル, image:背景画像ファイル名
+    def __init__(self, title, wh, image):
         pg.display.set_caption(title)
-        self.sfc = pg.display.set_mode(wh)      # Surface
-        self.rct = self.sfc.get_rect()          # Rect
-        self.bgi_sfc = pg.image.load(image)     # Surface
-        self.bgi_rct = self.bgi_sfc.get_rect()  # Rect  
+        self.sfc = pg.display.set_mode(wh)
+        self.rct = self.sfc.get_rect()
+        self.bgi_sfc = pg.image.load(image)
+        self.bgi_rct = self.bgi_sfc.get_rect()  
 
     def blit(self):
         self.sfc.blit(self.bgi_sfc, self.bgi_rct) 
@@ -25,9 +27,9 @@ class Screen:
 class Player:
     # image:画像ファイル名, size:拡大率, xy:初期座標タプル, hp:体力
     def __init__(self, image, size, xy, hp):
-        self.sfc = pg.image.load(image)                        # Surface
-        self.sfc = pg.transform.rotozoom(self.sfc, 0, size)    # Surface
-        self.rct = self.sfc.get_rect()                         # Rect
+        self.sfc = pg.image.load(image)
+        self.sfc = pg.transform.rotozoom(self.sfc, 0, size)
+        self.rct = self.sfc.get_rect()
         self.rct.center = xy
         self.hp = hp
     
@@ -250,7 +252,7 @@ def main():
 
             # ダメージ判定を受けたときの処理:横井
             if player.rct.colliderect(bar.rct) and (not inv): 
-                damage(screen.sfc, 0.5) # 画面を赤く変化させる
+                damage(screen.sfc, 0.5)
                 player.hp -= 1 
 
         # 時間を画面上に表示する:横井
@@ -353,7 +355,7 @@ def main():
                 if event.key == pg.K_LSHIFT and inv_point == 10:
                     inv_point = 0
                     inv = True
-                    st = time  # 無敵の開始時刻を保存
+                    st = time
             
                 # スペースキーを押したときに弾を打つ:金
                 if event.key == pg.K_SPACE:
