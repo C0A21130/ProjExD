@@ -7,7 +7,7 @@ BARS_NUM = 5  # 落ちてくる障害物の最大数
 INIT_ITEM_POSITION_X = -30 # アイテムの初期位置
 
 # 弾数の実装のための変数
-rz_num = 10 # 弾数を1000で初期化
+rz_num = 10 # 弾数を10で初期化
 
 # メインの画面を生成するクラス
 class Screen:
@@ -197,7 +197,7 @@ def main():
     clock = pg.time.Clock() # 時間計測用のオブジェクト
 
     # BGMを再生する関数の呼び出し:山本
-    sound()
+    # sound()
 
     # スクリーンの生成
     screen = Screen("", (700, 900), "fig/pg_bg.jpg") # スクリーンクラスの生成
@@ -220,16 +220,17 @@ def main():
     time_text = Text(f"Time:{time: .1f}", (10, 10))
     hp_text = Text(f"HP:{player.hp}", (500, 10))
     score_text = Text(f"Score:{0}", (10, 80))
+    rz_num_text = Text(f"rz_num:{rz_num}", (10, 150))
     over_text = Text("GAME OVER", (170, 450)) # GAME OVERテキストの設定
 
     # 弾数を追加するアイテムを生成:岡田
-    rz_plus = Item(10, (255, 0, 0), screen)
+    rz_plus = Item(15, (255, 0, 0), screen)
 
     # ライフを回復するアイテムを生成:岡田
-    heal = Item(10, (0, 128, 0), screen)
+    heal = Item(15, (0, 128, 0), screen)
 
     # 無敵ゲージを生成:
-    inv_text = Text("X"*inv_point, (50, 150))
+    inv_text = Text("X"*inv_point, (10, 220))
 
     # 常にゲームを再生し続ける
     while True:
@@ -265,7 +266,15 @@ def main():
         score_text.text = f"Score:{score}"
         score_text.blit(screen)
 
+        # 弾数を表示する
+        rz_num_text.text = f"rz_num:{rz_num}"
+        rz_num_text.blit(screen)
+
         # 無敵ゲージを表示する:岡田
+        if inv_point == 10:
+            inv_text.text = "O"*inv_point
+        else:
+            inv_text.text = "X"*inv_point
         inv_text.blit(screen)
         
         # HPが0以下のときゲームを終了してそれ以外ならゲームを続行する:横井
@@ -300,6 +309,7 @@ def main():
 
         # 弾数追加アイテムとプレイヤーがぶつかったときに回復アイテムを画面から消して弾数を追加:岡田
         if player.rct.colliderect(rz_plus.rct): # 弾数追加の処理
+            rz_num += 3
             for i in range(3):
                 rz_list.append(Razer((10,20),(255,0,0),rz_num,screen,player))
             rz_plus.rct.centerx = -30
@@ -319,7 +329,9 @@ def main():
             for bar in bars:
                 if rz.rct.colliderect(bar.rct):
                     rz.rct.centerx=1000
-                    bar.rct.centerx=1000
+                    bar.rct.centerx=-1000
+                    if inv_point < 10:
+                        inv_point += 1
                 
             
         if time - st > 5: # 無敵は5秒継続
@@ -343,6 +355,7 @@ def main():
                     if len(rz_list)>0: #リストに中身があるならレーザーを取り出す
                         rz=rz_list.pop(0)
                         rz.rct.centerx = player.rct.centerx
+                        rz_num -= 1
                         rz.update(screen)
 
         
