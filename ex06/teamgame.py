@@ -266,7 +266,7 @@ def main():
         score_text.text = f"Score:{score}"
         score_text.blit(screen)
 
-        # 弾数を表示する
+        # 弾数を表示する:岡田
         rz_num_text.text = f"rz_num:{rz_num}"
         rz_num_text.blit(screen)
 
@@ -332,7 +332,6 @@ def main():
                     bar.rct.centerx=-1000
                     if inv_point < 10:
                         inv_point += 1
-                
             
         if time - st > 5: # 無敵は5秒継続
             inv = False
