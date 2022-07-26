@@ -335,11 +335,9 @@ def main():
 
         if time - st > 10: # 無敵は10秒継続
             inv = False
-        
-        inv_point = 10
 
-        if inv:
-            screen.sfc.fill((192, 192, 0), special_flags = pg.BLEND_MULT)
+        if inv: # 無敵中に画面を黄色にする:岡田
+            screen.sfc.fill((255, 255, 0), special_flags = pg.BLEND_MULT)
 
         # 画面のばつボタンをクリックしたときに終了する
         for event in pg.event.get():
