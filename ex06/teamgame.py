@@ -267,7 +267,7 @@ def main():
         score_text.blit(screen)
 
         # 弾数を表示する:岡田
-        rz_num_text.text = f"rz_num:{rz_num}"
+        rz_num_text.text = f"Shots:{rz_num}"
         rz_num_text.blit(screen)
 
         # 無敵ゲージを表示する:岡田
@@ -332,9 +332,14 @@ def main():
                     bar.rct.centerx=-1000
                     if inv_point < 10:
                         inv_point += 1
-            
-        if time - st > 5: # 無敵は5秒継続
+
+        if time - st > 10: # 無敵は10秒継続
             inv = False
+        
+        inv_point = 10
+
+        if inv:
+            screen.sfc.fill((192, 192, 0), special_flags = pg.BLEND_MULT)
 
         # 画面のばつボタンをクリックしたときに終了する
         for event in pg.event.get():
@@ -356,7 +361,6 @@ def main():
                         rz.rct.centerx = player.rct.centerx
                         rz_num -= 1
                         rz.update(screen)
-
         
         pg.display.update()   # 画面を更新する
         clock.tick(1000)
