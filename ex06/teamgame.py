@@ -4,8 +4,9 @@ import random
 from random import randint     # randomモジュール内にあるrandint関数を読み込む
 
 BARS_NUM = 5  # 落ちてくる障害物の最大数
-INIT_ITEM_POSITION_X = -30 # アイテムの初期位置
-rz_num = 10  # 弾数を10で初期化
+
+# 弾数の実装のための変数
+rz_num = 10
 
 # メインの画面を生成するクラス
 class Screen:
@@ -334,7 +335,8 @@ def main():
                     if inv_point < 10:
                         inv_point += 1
 
-        if time - st > 10:  # 無敵は10秒継続
+        # 無敵は10秒継続:岡田
+        if time - st > 10:  
             inv = False
 
         # 無敵中に画面を黄色にする:岡田
@@ -345,8 +347,8 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-                
             if event.type == pg.KEYDOWN:
+
                 # 無敵タイムを開始する処理:岡田
                 if event.key == pg.K_LSHIFT and inv_point == 10:
                     inv_point = 0
