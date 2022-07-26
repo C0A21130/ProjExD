@@ -4,7 +4,6 @@ import random
 from random import randint     # randomモジュール内にあるrandint関数を読み込む
 
 BARS_NUM = 5  # 落ちてくる障害物の最大数
-INIT_ITEM_POSITION_X = -30 # アイテムの初期位置
 
 # 弾数の実装のための変数
 rz_num = 10 # 弾数を10で初期化
@@ -217,11 +216,11 @@ def main():
     x=0
 
     # 画面に表示するテキストを生成:横井
-    time_text = Text(f"Time:{time: .1f}", (10, 10))
-    hp_text = Text(f"HP:{player.hp}", (500, 10))
-    score_text = Text(f"Score:{0}", (10, 80))
-    rz_num_text = Text(f"rz_num:{rz_num}", (10, 150))
-    over_text = Text("GAME OVER", (170, 450)) # GAME OVERテキストの設定
+    time_text = Text(f"Time:{time: .1f}", (10, 10))   # 経過した時間テキストの生成
+    hp_text = Text(f"HP:{player.hp}", (500, 10))      # プレイヤーの残りHPテキストの生成
+    score_text = Text(f"Score:{0}", (10, 80))         # スコアテキストの生成
+    rz_num_text = Text(f"rz_num:{rz_num}", (10, 150)) # 弾数テキストの生成
+    over_text = Text("GAME OVER", (170, 450))         # GAME OVERテキストの生成
 
     # 弾数を追加するアイテムを生成:岡田
     rz_plus = Item(15, (255, 0, 0), screen)
@@ -333,9 +332,9 @@ def main():
                     if inv_point < 10:
                         inv_point += 1
 
+        # 無敵の確認:岡田
         if time - st > 10: # 無敵は10秒継続
             inv = False
-
         if inv: # 無敵中に画面を黄色にする:岡田
             screen.sfc.fill((255, 255, 0), special_flags = pg.BLEND_MULT)
 
@@ -343,8 +342,8 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-                
             if event.type == pg.KEYDOWN:
+
                 # 無敵タイムを開始する処理:岡田
                 if event.key == pg.K_LSHIFT and inv_point == 10:
                     inv_point = 0
